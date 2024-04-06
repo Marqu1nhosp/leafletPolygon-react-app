@@ -23,8 +23,7 @@ export default function FormRegisterPolygon({
   errorCoordinates,
   polygons,
   handlePolygonSelection,
-  onShowAllPolygons,
-  selectedPolygons
+  onShowAllPolygons
 }: PolygonFormProps) {
   const { register, handleSubmit, reset } = useForm<CreatePolygon>();
 

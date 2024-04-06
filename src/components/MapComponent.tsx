@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Polygon, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -14,7 +13,6 @@ export function MapComponent() {
   const [polygons, setPolygons] = useState<PolygonData[]>([]);
   const [selectedPolygons, setSelectedPolygons] = useState<string[]>([]);
   const [errorCoordinates, setErrorCoordinates] = useState('');
-  const [showAllPolygons, setShowAllPolygons] = useState(false)
 
   function handleMapClick (e: L.LeafletMouseEvent){
     const { lat, lng } = e.latlng;
@@ -45,7 +43,6 @@ export function MapComponent() {
   }
 
   function handleShowAllPolygons() {
-    setShowAllPolygons(true)
     setSelectedPolygons(polygons.map(polygon => polygon.name));
   }
 
@@ -69,13 +66,13 @@ export function MapComponent() {
       </div>
 
       <div className="flex flex-col items-center justify-center">
-      <FormRegisterPolygon
+        <FormRegisterPolygon
           onSubmit={handleCreatePolygon}
           errorCoordinates={errorCoordinates}
           polygons={polygons}
           handlePolygonSelection={handlePolygonSelection}
           selectedPolygons={selectedPolygons}
-          onShowAllPolygons={handleShowAllPolygons} // Passa a função para o componente FormRegisterPolygon
+          onShowAllPolygons={handleShowAllPolygons}
         />
       </div>
     </>
