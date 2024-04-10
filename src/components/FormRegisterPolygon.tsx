@@ -12,7 +12,7 @@ type CreatePolygon = z.infer<typeof createPolygonFormSchema>;
 interface PolygonFormProps {
   onSubmit: (data: CreatePolygon) => void;
   errorCoordinates: string;
-  polygons: { name: string }[];
+  polygons: { namePolygon: string }[];
   handlePolygonSelection: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   selectedPolygons: string[];
   onShowAllPolygons: () => void;
@@ -23,7 +23,8 @@ export default function FormRegisterPolygon({
   errorCoordinates,
   polygons,
   handlePolygonSelection,
-  onShowAllPolygons
+  onShowAllPolygons,
+  selectedPolygons
 }: PolygonFormProps) {
   const { register, handleSubmit, reset } = useForm<CreatePolygon>();
 
@@ -32,9 +33,10 @@ export default function FormRegisterPolygon({
     reset();
   }
 
+  console.log(polygons)
 
   return (
-    <form onSubmit={handleSubmit(handleSubmitForm)} className="flex flex-col gap-4 mr-16">
+    <form onSubmit={handleSubmit(handleSubmitForm)} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
         <div>
           <label htmlFor="" className="text-zinc-500 font-bold">Nome do polígono</label>
@@ -50,7 +52,7 @@ export default function FormRegisterPolygon({
       </div>
 
       <div>
-        <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold py-1.5 px-1.5 rounded w-80">Adicionar</button>
+        <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold py-1.5 px-1.5 rounded w-80">Salvar</button>
       </div>
       <div>
         <button type="button" className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1.5 px-1.5 rounded w-80" onClick={onShowAllPolygons}>Visualizar todos</button>
@@ -60,12 +62,12 @@ export default function FormRegisterPolygon({
         <select
           id="polygons"
           className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1.5 px-14 rounded w-80"
-          value=""
+          value={selectedPolygons.length > 0 ? selectedPolygons[0] : ""}
           onChange={handlePolygonSelection}
         >
-          <option value="" selected>Selecione um polígono</option>
+          <option value="">Selecione um polígono</option>
           {polygons.map((polygon, index) => (
-            <option key={index} value={polygon.name}>{polygon.name}</option>
+            <option className="items-center justify-center" key={index} value={polygon.namePolygon}>{polygon.namePolygon}</option>
           ))}
         </select>
       </div>

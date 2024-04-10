@@ -1,9 +1,11 @@
-import { Map } from "./components/Map";
 
+import { AuthProvider } from "./context/auth";
+import { AppRoutes } from "./routes";
 
 export function App() {
   return (
-          <Map />
-  )
+   <AuthProvider>
+        <AppRoutes />
+   </AuthProvider>
+  );
 }
-
