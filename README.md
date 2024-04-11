@@ -2,6 +2,9 @@
 
 Este é um aplicativo de gerenciamento de estabelecimentos que permite aos usuários se cadastrar e se autenticar na aplicação. Criar, visualizar e editar Estabelecimentos em um mapa interativo. Os usuários podem adicionar novos locais, editar os existentes e visualizar uma lista dos locais cadastrados.
 
+## Telas da aplicação 
+![Tela de Login](assets/foto-1.png)
+
 ## Funcionalidades
 
 - **Visualização de Estabelecimentos**: Os usuários podem visualizar os estabelecimentos existentes em um mapa interativo.
