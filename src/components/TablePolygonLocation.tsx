@@ -3,19 +3,21 @@ import { AuthContext } from "../context/auth";
 import { useContext, useEffect, useState } from "react";
 import { api } from "../api/axios";
 import { format } from "date-fns"
+import { useNavigate } from "react-router-dom";
+import { toast, Toaster } from 'sonner'
 
 interface PolygonData {
     id: string
     namePolygon: string;
     coordinates: number[][];
     createdAt?: string;
-    status?: string;
+    status: string;
 }
 
 export function TablePolygonLocation() {
     const { userId } = useContext(AuthContext);
     const [polygons, setPolygons] = useState<PolygonData[]>([]);
-   
+   const navigate = useNavigate()
     useEffect(() => {
         const fetchPolygons = async () => {
             try {
@@ -28,6 +30,7 @@ export function TablePolygonLocation() {
                     status: polygon.status, 
                 }));
                 setPolygons(polygonsFromApi);
+                console.log(polygons)
             } catch (error) {
                 console.error("Erro ao buscar polígonos da API:", error);
             }
@@ -40,14 +43,16 @@ export function TablePolygonLocation() {
         try {
             await api.delete(`/polygon/${polygonId}`);
             setPolygons(polygons.filter(polygon => polygon.id !== polygonId));
-            console.log("Polígono deletado com sucesso!");
+            toast.success("Polígono deletado com sucesso!");
         } catch (error) {
             console.error("Erro ao deletar polígono:", error);
+            toast.error("Erro ao deletar polígono");
         }
     }
 
     async function handleEdit(polygonId: string){
-       console.log('Oi')
+        navigate(`/edit-polygon/${polygonId}`);
+        console.log(polygonId)
     }
 
     return (
@@ -83,7 +88,7 @@ export function TablePolygonLocation() {
                             </td>
                             <td className="px-6 py-4">
                                 <div className="flex flex-row gap-1.5">
-                                <button className="font-medium text-blue-500 hover:text-blue-700"><Pencil size={32} /></button>
+                                <button onClick={() => handleEdit(polygon.id)} className="font-medium text-blue-500 hover:text-blue-700"><Pencil size={32} /></button>
                                 <button onClick={() => handleDelete(polygon.id)}  className="font-medium text-red-500 hover:text-red-700"><Trash size={32} /></button>
                                 </div>
                             </td>
@@ -91,6 +96,13 @@ export function TablePolygonLocation() {
                     ))}
                 </tbody>
             </table>
+            <Toaster
+                toastOptions={{
+                    style: { background: 'red', color: 'white' },
+                    className: 'my-toast',
+                }}
+                closeButton 
+            />
         </div>
 
     )

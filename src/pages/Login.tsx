@@ -5,6 +5,7 @@ import { Eye, EyeSlash } from 'phosphor-react';
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast, Toaster } from 'sonner'
 
 const signInFormSchema = z.object({
     username: z.string(),
@@ -21,7 +22,7 @@ export function Login() {
 
     if (isAuthenticated) {
         return <Navigate to="/manage-location" />;
-    } 
+    }
 
     async function handleSignIn(data: UserSignIn) {
         try {
@@ -29,7 +30,7 @@ export function Login() {
             // Se o login for bem-sucedido, o usuário será redirecionado automaticamente pelo contexto de autenticação
         } catch (error) {
             console.error('Erro ao fazer login:', error);
-            alert('Credenciais inválidas. Por favor, verifique seu usuário e senha e tente novamente.');
+            toast.error('Credenciais inválidas. Por favor, verifique seu usuário e senha e tente novamente.');
         }
     }
 
@@ -70,6 +71,12 @@ export function Login() {
                     </form>
                 </div>
             </div>
+            <Toaster
+                toastOptions={{
+                    style: { background: 'red', color: 'white' },
+                    className: 'my-toast',
+                }}
+            />
         </main>
     );
 }

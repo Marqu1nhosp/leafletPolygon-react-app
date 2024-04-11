@@ -2,12 +2,15 @@
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-// import { v4 as uuid } from 'uuid'
-
+import { toast, Toaster } from 'sonner'
 import { useState } from 'react'
 import { Eye, EyeSlash } from 'phosphor-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { api } from '../api/axios'
+
+interface ResponseData {
+    name: string
+  }
 
 // Define o esquema para o formulário de criação de usuário usando Zod
 const createUserFormSchema = z.object({
@@ -28,7 +31,7 @@ type CreateUser = z.infer<typeof createUserFormSchema>
 export function FormRegisterUser() {
     // Estado para alternar a visibilidade da senha
     const [visiblePassword, setVisiblePassword] = useState(false)
-
+    const navigate = useNavigate()
     const {
         register,
         handleSubmit,
@@ -50,9 +53,24 @@ export function FormRegisterUser() {
                 password
             })
 
-            console.log('Usuário criado com sucesso')
+            const promise = (): Promise<ResponseData> => {
+                return new Promise((resolve) => setTimeout(() => resolve({ name: name }), 2000));
+              };
+
+            toast.promise(promise, {
+                loading: 'Loading...',
+                success: (response) => {
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 4000);
+                    return `${response.name}, sua conta foi criada com sucesso, você será redirecionado ao Login em 4 segundos.`;
+                },
+                error: 'Error',
+            });
+            
         } catch (error) {
             console.error('Erro ao enviar os dados para api de registro de usuário')
+            toast.error('Erro ao enviar os dados para api de registro de usuário')
         }
     }
 
@@ -121,7 +139,7 @@ export function FormRegisterUser() {
                 )}
             </div>
 
-
+            <Toaster richColors  />
             <button
                 type="submit"
                 className="text-white bg-green-600 hover:bg-green-800 font-semibold rounded h-9 w-56 "

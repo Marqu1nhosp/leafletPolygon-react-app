@@ -4,11 +4,13 @@ import "leaflet/dist/leaflet.css";
 import FormRegisterPolygon from "./FormRegisterPolygon";
 import { api } from "../api/axios";
 import { AuthContext } from "../context/auth";
-import { Link } from "react-router-dom";
+import { ButtonManagePolygonLocation } from "./ButtonManagePolygonLocation";
+import { toast, Toaster } from 'sonner'
 
 interface PolygonData {
   namePolygon: string;
   coordinates: [number, number][];
+  status: string;
 }
 
 export function MapComponent() {
@@ -55,7 +57,7 @@ export function MapComponent() {
       return;
     }
 
-    setPolygons(prevState => [{ namePolygon: namePolygon, coordinates: userClickedCoordinates }, ...prevState]);
+    setPolygons(prevState => [{ namePolygon: namePolygon, coordinates: userClickedCoordinates, status }, ...prevState]);
     setUserClickedCoordinates([]);
     console.log(polygons)
 
@@ -68,8 +70,9 @@ export function MapComponent() {
         userId,
         namePolygon,
         coordinates: coordinatesFormatted,
+        status: "Ativo"
       });
-      console.log("Dados do polígono enviados com sucesso para a API.");
+      toast.success("Local salvo com sucesso!");
     } catch (error) {
       console.error("Erro ao enviar dados do polígono para a API:", error);
     }
@@ -115,9 +118,15 @@ export function MapComponent() {
           />
         </div>
         <div className="flex">
-          <Link type="submit" to="/manage-location" className="bg-neutral-500 hover:bg-neutral-600 text-white font-bold py-2 px-16 rounded">Gerenciamento de locais</Link>
+          <ButtonManagePolygonLocation />
         </div>
-
+        <Toaster
+                toastOptions={{
+                    style: { background: 'green', color: 'white' },
+                    className: 'my-toast',
+                }}
+                closeButton 
+            />
       </div>
     </>
   );
