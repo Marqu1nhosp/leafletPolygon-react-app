@@ -134,7 +134,10 @@ export function EditPolygon() {
                     <MapClickHandler onMapClick={handleMapClick} />
                 </MapContainer>
             </div>
-            <div className="flex flex-col gap-14">
+            <div className="flex flex-col gap-10">
+                <div className="">
+                    <h1 className="text-center text-xl font-semibold text-zinc-400">Edite o Estabelecimento</h1>
+                </div>
                 <div>
                     <form onSubmit={handleSubmit(handleSubmitEdit)} className="flex flex-col gap-4">
                         <div className="flex flex-col gap-1">
