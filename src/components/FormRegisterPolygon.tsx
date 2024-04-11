@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 const createPolygonFormSchema = z.object({
   namePolygon: z.string().nonempty('O nome do polígono é obrigatório.')
-});
+})
 
-type CreatePolygon = z.infer<typeof createPolygonFormSchema>;
+type CreatePolygon = z.infer<typeof createPolygonFormSchema>
 
 interface PolygonFormProps {
-  onSubmit: (data: CreatePolygon) => void;
-  errorCoordinates: string;
-  polygons: { namePolygon: string }[];
-  handlePolygonSelection: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  selectedPolygons: string[];
-  onShowAllPolygons: () => void;
+  onSubmit: (data: CreatePolygon) => void
+  errorCoordinates: string
+  polygons: { namePolygon: string }[]
+  handlePolygonSelection: (e: React.ChangeEvent<HTMLSelectElement>) => void
+  selectedPolygons: string[]
+  onShowAllPolygons: () => void
 }
 
 export default function FormRegisterPolygon({
@@ -26,11 +26,11 @@ export default function FormRegisterPolygon({
   onShowAllPolygons,
   selectedPolygons
 }: PolygonFormProps) {
-  const { register, handleSubmit, reset } = useForm<CreatePolygon>();
+  const { register, handleSubmit, reset } = useForm<CreatePolygon>()
 
   function handleSubmitForm(data: CreatePolygon) {
-    onSubmit(data);
-    reset();
+    onSubmit(data)
+    reset()
   }
 
   console.log(polygons)
@@ -75,5 +75,5 @@ export default function FormRegisterPolygon({
         </select>
       </div>
     </form>
-  );
+  )
 }

@@ -2,31 +2,12 @@
 
 Este é um aplicativo de gerenciamento de estabelecimentos que permite aos usuários se cadastrar e se autenticar na aplicação. Criar, visualizar e editar Estabelecimentos em um mapa interativo. Os usuários podem adicionar novos locais, editar os existentes e visualizar uma lista dos locais cadastrados.
 
-## Clique aqui para ver as telas
-<button onclick="toggleImages()">Telas da Aplicação</button>
-
-<div id="images">
-  <img class="hidden" src="assets/foto-1.png" alt="Tela de Login">
-  <img class="hidden" src="assets/foto-2.png" alt="Tela de Registro">
-  <img class="hidden" src="assets/foto-3.png" alt="Tela de Cadastro Estabelecimentos">
-  <img class="hidden" src="assets/foto-4.png" alt="Tela de Editar">
-</div>
-
-<script>
-  function toggleImages() {
-    var images = document.querySelectorAll('#images img');
-    images.forEach(function(image) {
-      image.classList.toggle('hidden');
-    });
-  }
-</script>
-
-<style>
-  /* Estilo para esconder as imagens inicialmente */
-  .hidden {
-    display: none;
-  }
-</style>
+## Telas da aplicação 
+![Tela de Login](public/foto-1.png)
+![Tela de Registro](public/foto-2.png)
+![Tela de Lista de Estabelecimentos](public/foto-3.png)
+![Tela de Cadastro Estabelecimentos](public/foto-4.png)
+![Tela de Editar](public/foto-5.png)
 
 ## Funcionalidades
 

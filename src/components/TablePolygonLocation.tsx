@@ -1,57 +1,57 @@
-import { Pencil, Trash } from "phosphor-react";
-import { AuthContext } from "../context/auth";
-import { useContext, useEffect, useState } from "react";
-import { api } from "../api/axios";
+import { Pencil, Trash } from "phosphor-react"
+import { AuthContext } from "../context/auth"
+import { useContext, useEffect, useState } from "react"
+import { api } from "../api/axios"
 import { format } from "date-fns"
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 import { toast, Toaster } from 'sonner'
 
 interface PolygonData {
     id: string
-    namePolygon: string;
-    coordinates: number[][];
-    createdAt?: string;
-    status: string;
+    namePolygon: string
+    coordinates: number[][]
+    createdAt?: string
+    status: string
 }
 
 export function TablePolygonLocation() {
-    const { userId } = useContext(AuthContext);
-    const [polygons, setPolygons] = useState<PolygonData[]>([]);
+    const { userId } = useContext(AuthContext)
+    const [polygons, setPolygons] = useState<PolygonData[]>([])
    const navigate = useNavigate()
     useEffect(() => {
         const fetchPolygons = async () => {
             try {
-                const response = await api.get(`/polygon/${userId}`);
+                const response = await api.get(`/polygon/${userId}`)
                 const polygonsFromApi = response.data.polygons.map((polygon: PolygonData) => ({
                     id: polygon.id,
                     namePolygon: polygon.namePolygon,
                     coordinates: Array.isArray(polygon.coordinates) ? polygon.coordinates : JSON.parse(polygon.coordinates),
                     createdAt: polygon.createdAt ? format(new Date(polygon.createdAt), 'dd/MM/yyyy') : '',
                     status: polygon.status, 
-                }));
-                setPolygons(polygonsFromApi);
+                }))
+                setPolygons(polygonsFromApi)
                 console.log(polygons)
             } catch (error) {
-                console.error("Erro ao buscar polígonos da API:", error);
+                console.error("Erro ao buscar polígonos da API:", error)
             }
-        };
+        }
 
-        fetchPolygons();
-    }, [userId]);
+        fetchPolygons()
+    }, [userId])
 
     async function handleDelete(polygonId: string) {
         try {
-            await api.delete(`/polygon/${polygonId}`);
-            setPolygons(polygons.filter(polygon => polygon.id !== polygonId));
-            toast.success("Polígono deletado com sucesso!");
+            await api.delete(`/polygon/${polygonId}`)
+            setPolygons(polygons.filter(polygon => polygon.id !== polygonId))
+            toast.success("Polígono deletado com sucesso!")
         } catch (error) {
-            console.error("Erro ao deletar polígono:", error);
-            toast.error("Erro ao deletar polígono");
+            console.error("Erro ao deletar polígono:", error)
+            toast.error("Erro ao deletar polígono")
         }
     }
 
     async function handleEdit(polygonId: string){
-        navigate(`/edit-polygon/${polygonId}`);
+        navigate(`/edit-polygon/${polygonId}`)
         console.log(polygonId)
     }
 

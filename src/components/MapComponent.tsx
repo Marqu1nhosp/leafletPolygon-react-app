@@ -9,62 +9,62 @@ import { toast, Toaster } from 'sonner'
 import { ButtonBack } from "./ButtonBack";
 
 interface PolygonData {
-  namePolygon: string;
-  coordinates: [number, number][];
-  status: string;
+  namePolygon: string
+  coordinates: [number, number][]
+  status: string
 }
 
 export function MapComponent() {
-  const { userId } = useContext(AuthContext);
+  const { userId } = useContext(AuthContext)
   console.log(userId)
-  const [userClickedCoordinates, setUserClickedCoordinates] = useState<[number, number][]>([]);
-  const [polygons, setPolygons] = useState<PolygonData[]>([]);
-  const [selectedPolygons, setSelectedPolygons] = useState<string[]>([]);
-  const [errorCoordinates, setErrorCoordinates] = useState('');
+  const [userClickedCoordinates, setUserClickedCoordinates] = useState<[number, number][]>([])
+  const [polygons, setPolygons] = useState<PolygonData[]>([])
+  const [selectedPolygons, setSelectedPolygons] = useState<string[]>([])
+  const [errorCoordinates, setErrorCoordinates] = useState('')
 
   function handleMapClick(e: L.LeafletMouseEvent) {
-    const { lat, lng } = e.latlng;
-    setUserClickedCoordinates(prevState => [...prevState, [lat, lng]]);
+    const { lat, lng } = e.latlng
+    setUserClickedCoordinates(prevState => [...prevState, [lat, lng]])
   }
 
   useEffect(() => {
-    fetchPolygons();
-  }, []);
+    fetchPolygons()
+  }, [])
 
   async function fetchPolygons() {
     try {
-      const response = await api.get(`/polygon/${userId}`);
+      const response = await api.get(`/polygon/${userId}`)
       console.log(response.data)
       const polygonsFromApi = response.data.polygons.map((polygon: PolygonData) => ({
         namePolygon: polygon.namePolygon,
         coordinates: Array.isArray(polygon.coordinates) ? polygon.coordinates : JSON.parse(polygon.coordinates)
-      }));
-      console.log("Dados dos polígonos recebidos:", polygonsFromApi);
-      setPolygons(polygonsFromApi);
+      }))
+      console.log("Dados dos polígonos recebidos:", polygonsFromApi)
+      setPolygons(polygonsFromApi)
     } catch (error) {
-      console.error("Erro ao buscar polígonos da API:", error);
+      console.error("Erro ao buscar polígonos da API:", error)
     }
   }
 
   async function handleCreatePolygon(data: { namePolygon: string }) {
-    const { namePolygon } = data;
+    const { namePolygon } = data
 
     if (userClickedCoordinates.length === 0) {
-      setErrorCoordinates("Nenhuma coordenada de polígono foi registrada.");
-      return;
+      setErrorCoordinates("Nenhuma coordenada de polígono foi registrada.")
+      return
     }
     if (userClickedCoordinates.length < 3) {
-      setErrorCoordinates("São necessárias pelo menos 3 coordenadas para formar um polígono.");
-      return;
+      setErrorCoordinates("São necessárias pelo menos 3 coordenadas para formar um polígono.")
+      return
     }
 
-    setPolygons(prevState => [{ namePolygon: namePolygon, coordinates: userClickedCoordinates, status }, ...prevState]);
-    setUserClickedCoordinates([]);
+    setPolygons(prevState => [{ namePolygon: namePolygon, coordinates: userClickedCoordinates, status }, ...prevState])
+    setUserClickedCoordinates([])
     console.log(polygons)
 
     const coordinatesFormatted = `[${userClickedCoordinates
       .map(coord => `[${coord[0]}, ${coord[1]}]`)
-      .join(", ")}]`;
+      .join(", ")}]`
 
     try {
       await api.post('polygon', {
@@ -72,20 +72,20 @@ export function MapComponent() {
         namePolygon,
         coordinates: coordinatesFormatted,
         status: "Ativo"
-      });
-      toast.success("Local salvo com sucesso!");
+      })
+      toast.success("Local salvo com sucesso!")
     } catch (error) {
-      console.error("Erro ao enviar dados do polígono para a API:", error);
+      console.error("Erro ao enviar dados do polígono para a API:", error)
     }
   }
 
   function handlePolygonSelection(e: React.ChangeEvent<HTMLSelectElement>) {
-    const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-    setSelectedPolygons(selectedOptions);
+    const selectedOptions = Array.from(e.target.selectedOptions, option => option.value)
+    setSelectedPolygons(selectedOptions)
   }
 
   function handleShowAllPolygons() {
-    setSelectedPolygons(polygons.map(polygon => polygon.namePolygon));
+    setSelectedPolygons(polygons.map(polygon => polygon.namePolygon))
   }
 
   return (
@@ -94,7 +94,7 @@ export function MapComponent() {
         <MapContainer center={[-14.8611, -40.8442]} zoom={13} className="h-[90vh] w-[65vw] mt-8">
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution='&copy <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           {polygons.map((polygon, index) => (
             (selectedPolygons.includes(polygon.namePolygon)) &&
@@ -130,19 +130,19 @@ export function MapComponent() {
             />
       </div>
     </>
-  );
+  )
 }
 
 interface MapClickHandlerProps {
-  onMapClick: (e: L.LeafletMouseEvent) => void;
+  onMapClick: (e: L.LeafletMouseEvent) => void
 }
 
 function MapClickHandler({ onMapClick }: MapClickHandlerProps) {
   useMapEvents({
     click: (e) => {
-      onMapClick(e);
+      onMapClick(e)
     },
-  });
+  })
 
   return null;
 }
