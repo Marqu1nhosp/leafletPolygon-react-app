@@ -4,8 +4,9 @@ import "leaflet/dist/leaflet.css";
 import FormRegisterPolygon from "./FormRegisterPolygon";
 import { api } from "../api/axios";
 import { AuthContext } from "../context/auth";
-import { ButtonManagePolygonLocation } from "./ButtonManagePolygonLocation";
+
 import { toast, Toaster } from 'sonner'
+import { ButtonBack } from "./ButtonBack";
 
 interface PolygonData {
   namePolygon: string;
@@ -118,7 +119,7 @@ export function MapComponent() {
           />
         </div>
         <div className="flex">
-          <ButtonManagePolygonLocation />
+          <ButtonBack />
         </div>
         <Toaster
                 toastOptions={{

@@ -38,8 +38,11 @@ export default function FormRegisterPolygon({
   return (
     <form onSubmit={handleSubmit(handleSubmitForm)} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
+          <div className="">
+              <h1 className="text-center text-xl font-semibold text-zinc-400">Cadasto de Estabelecimentos</h1>
+          </div>
         <div>
-          <label htmlFor="" className="text-zinc-500 font-bold">Nome do polígono</label>
+          <label htmlFor="" className="text-zinc-500 font-bold">Nome</label>
         </div>
         <div>
           <input {...register('namePolygon')} type="text" placeholder="Ex: escritório da Elleven" className="bg-slate-700 w-80 rounded-md p-1.5 mr-1.5 text-white" />
