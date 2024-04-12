@@ -48,7 +48,3 @@ Este é um aplicativo de gerenciamento de estabelecimentos que permite aos usuá
 ## Contribuição
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue se encontrar um bug ou tiver uma sugestão de melhoria. Você também pode enviar um pull request com suas próprias contribuições.
-
-## Licença
-
-Este projeto está licenciado sob a Licença MIT. Consulte o arquivo LICENSE para obter mais detalhes.
