@@ -8,20 +8,22 @@ interface User {
 
 interface AuthContextType {
     user: string | null;
-    userId: string | null; // Estado para o ID do usuário
+    userId: string | null;
     token: string | null;
     signIn: (userData: User) => Promise<void>;
     signOut: () => void;
     isAuthenticated: boolean;
+    loading: boolean,
 }
 
 export const AuthContext = createContext<AuthContextType>({
     user: null,
     userId: null,
     token: null,
-    signIn: async () => {},
-    signOut: () => {},
+    signIn: async () => { },
+    signOut: () => { },
     isAuthenticated: false,
+    loading: true,
 });
 
 interface AuthProviderProps {
@@ -33,16 +35,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [userId, setUserId] = useState<string | null>(null)
     const [token, setToken] = useState<string | null>(null)
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const loadingStoredData = async () => {
             const storedToken = localStorage.getItem("@Auth:token")
             const storedUserData = localStorage.getItem("@Auth:user")
-    
+
             if (storedToken && storedUserData) {
                 const userData = JSON.parse(storedUserData)
                 const { username, id } = userData
-    
+
                 setToken(storedToken)
                 setUser(username)
                 setUserId(id);
@@ -50,11 +53,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
             } else {
                 setIsAuthenticated(false)
             }
+            setLoading(false)
         };
-    
+
         loadingStoredData();
     }, []);
-    
+
 
     async function signIn({ username, password }: User) {
         try {
@@ -63,17 +67,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             setToken(token);
             setUser(user.username)
-            setUserId(user.id); 
+            setUserId(user.id);
             setIsAuthenticated(true)
 
             localStorage.setItem("@Auth:token", token)
-            localStorage.setItem("@Auth:user", JSON.stringify({ username: user.username, id: user.id}))
+            localStorage.setItem("@Auth:user", JSON.stringify({ username: user.username, id: user.id }))
+
 
             console.log("Usuário autenticado")
         } catch (error) {
             console.error("Erro ao fazer login:", error)
             setIsAuthenticated(false)
-            throw error; 
+            throw error;
         }
     }
 
@@ -88,7 +93,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     return (
-        <AuthContext.Provider value={{ user, userId, token, signIn, signOut, isAuthenticated }}>
+        <AuthContext.Provider value={{ user, userId, token, signIn, signOut, isAuthenticated, loading }}>
             {children}
         </AuthContext.Provider>
     );

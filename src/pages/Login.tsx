@@ -17,6 +17,7 @@ type UserSignIn = z.infer<typeof signInFormSchema>;
 export function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm<UserSignIn>({ resolver: zodResolver(signInFormSchema) });
     const [visiblePassword, setVisiblePassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate();
     const { signIn, isAuthenticated } = useContext(AuthContext);
 
@@ -24,18 +25,24 @@ export function Login() {
         return <Navigate to="/manage-location" />;
     }
 
+    function delay(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     async function handleSignIn(data: UserSignIn) {
         try {
+            setIsLoading(true)
+            await delay(2000)
             await signIn(data);
-            // Se o login for bem-sucedido, o usuário será redirecionado automaticamente pelo contexto de autenticação
+
         } catch (error) {
             console.error('Erro ao fazer login:', error);
             toast.error('Credenciais inválidas. Por favor, verifique seu usuário e senha e tente novamente.');
         }
+        setIsLoading(false)
     }
 
     if (isAuthenticated) {
-        // Se o usuário já estiver autenticado, redirecione para a página desejada
         navigate('/manage-location');
     }
 
@@ -64,7 +71,7 @@ export function Login() {
                                 </button>
                             </div>
                         </div>
-                        <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold py-1.5 px-1.5 rounded w-56">Entrar</button>
+                        <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold py-1.5 px-1.5 rounded w-56">{isLoading ? 'Autenticando' : 'Entrar'}</button>
                         <div>
                             <Link to="/register" className="text-[#9CA3AF] text-xs">Ainda não tem uma conta? Crie uma</Link>
                         </div>

@@ -4,8 +4,8 @@ import { AppRoutes } from "./routes";
 
 export function App() {
   return (
-   <AuthProvider>
-        <AppRoutes />
-   </AuthProvider>
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
   );
 }

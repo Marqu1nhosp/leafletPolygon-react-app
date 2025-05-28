@@ -19,7 +19,7 @@ export function MapComponent() {
   console.log(userId)
   const [userClickedCoordinates, setUserClickedCoordinates] = useState<[number, number][]>([])
   const [polygons, setPolygons] = useState<PolygonData[]>([])
-  const [selectedPolygons, setSelectedPolygons] = useState<string[]>([])
+
   const [errorCoordinates, setErrorCoordinates] = useState('')
 
   function handleMapClick(e: L.LeafletMouseEvent) {
@@ -79,57 +79,51 @@ export function MapComponent() {
     }
   }
 
-  function handlePolygonSelection(e: React.ChangeEvent<HTMLSelectElement>) {
-    const selectedOptions = Array.from(e.target.selectedOptions, option => option.value)
-    setSelectedPolygons(selectedOptions)
-  }
-
-  function handleShowAllPolygons() {
-    setSelectedPolygons(polygons.map(polygon => polygon.namePolygon))
-  }
 
   return (
     <>
-      <div className="h-screen w-screen flex justify-center">
-        <MapContainer center={[-14.8611, -40.8442]} zoom={13} className="h-[90vh] w-[65vw] mt-8">
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-          {polygons.map((polygon, index) => (
-            (selectedPolygons.includes(polygon.namePolygon)) &&
-            <Polygon key={index} pathOptions={{ color: 'blue' }} positions={polygon.coordinates} />
-          ))}
-          {userClickedCoordinates.length > 0 && (
-            <Polygon pathOptions={{ color: 'red' }} positions={userClickedCoordinates} />
-          )}
-          <MapClickHandler onMapClick={handleMapClick} />
-        </MapContainer>
-      </div>
+      <div className="h-screen w-screen flex flex-col md:flex-row items-center justify-center px-6 md:px-16">
 
-      <div className="flex flex-col items-center justify-center gap-20 mr-16">
-        <div>
+        <div className="flex justify-center md:flex-1 max-w-5xl h-[40vh] md:h-[80vh] min-h-[300px] mb-6 md:mb-0 w-full rounded-md overflow-hidden shadow-md">
+          <MapContainer
+            center={[-14.8611, -40.8442]}
+            zoom={13}
+            className="w-full h-full"
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            {userClickedCoordinates.length > 0 && (
+              <Polygon pathOptions={{ color: "red" }} positions={userClickedCoordinates} />
+            )}
+            <MapClickHandler onMapClick={handleMapClick} />
+          </MapContainer>
+        </div>
+
+
+        <div className="flex flex-col items-center justify-center gap-10 md:w-[40vw] w-full px-4 py-6 md:py-8 md:ml-8">
           <FormRegisterPolygon
             onSubmit={handleCreatePolygon}
             errorCoordinates={errorCoordinates}
             polygons={polygons}
-            handlePolygonSelection={handlePolygonSelection}
-            selectedPolygons={selectedPolygons}
-            onShowAllPolygons={handleShowAllPolygons}
+          />
+
+          <div className="flex justify-center w-full">
+            <ButtonBack />
+          </div>
+
+          <Toaster
+            toastOptions={{
+              style: { background: "green", color: "white" },
+              className: "my-toast",
+            }}
+            closeButton
           />
         </div>
-        <div className="flex">
-          <ButtonBack />
-        </div>
-        <Toaster
-                toastOptions={{
-                    style: { background: 'green', color: 'white' },
-                    className: 'my-toast',
-                }}
-                closeButton 
-            />
       </div>
     </>
+
   )
 }
 
